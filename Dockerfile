@@ -76,7 +76,7 @@ RUN python3 get-pip.py
 RUN pip3 install -U pip
 
 # Install mxnet
-RUN pip3 install mxnet-cu90 gluonts mxboard
+RUN pip3 install pip install torch torchvision
 
 # Install libs
 RUN pip3 install tqdm numpy pandas matplotlib scikit-learn pymltoolkit scipy seaborn numba statsmodels dill pymongo click
