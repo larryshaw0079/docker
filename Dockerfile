@@ -73,12 +73,12 @@ RUN ./configure && make && make install
 RUN wget https://bootstrap.pypa.io/get-pip.py
 RUN python3 get-pip.py
 
-RUN pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -U pip
+RUN pip3 install -U pip
 
 # Install mxnet
-RUN pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple mxnet-cu90 gluonts mxboard
+RUN pip3 install mxnet-cu90 gluonts mxboard
 
 # Install libs
-RUN pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple tqdm numpy pandas matplotlib scikit-learn pymltoolkit scipy seaborn numba statsmodels dill pymongo click
+RUN pip3 install tqdm numpy pandas matplotlib scikit-learn pymltoolkit scipy seaborn numba statsmodels dill pymongo click
 
 ENV LC_ALL C
