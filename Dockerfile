@@ -1,3 +1,4 @@
+###############################################################################################################
 FROM nvidia/cuda@sha256:40db1c98b66e133f54197ba1a66312b9c29842635c8cba5ae66fb56ded695b7c
 
 ENV HADOOP_VERSION=2.7.2
@@ -46,12 +47,16 @@ ENV PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bi
 
 WORKDIR /root
 
-# FROM pai.build.base:hadoop2.7.2-cuda9.0-cudnn7-devel-ubuntu16.04
+
+###############################################################################################################
 # Add symbol link for libcuda.so
 RUN ln -s /usr/local/cuda/targets/x86_64-linux/lib/stubs/libcuda.so \
           /usr/local/cuda/targets/x86_64-linux/lib/stubs/libcuda.so.1
 
-RUN apt-get clean && apt-get update && apt-get instal -y gcc make build-essential libssl-dev wget curl vim --allow-unauthenticated
+RUN DEBIAN_FRONTEND=noninteractive && \
+    apt-get clean && \
+    apt-get update -y && \
+    apt-get install -y gcc make build-essential libssl-dev wget curl vim --allow-unauthenticated
 
 WORKDIR /root
 RUN wget http://zlib.net/zlib-1.2.11.tar.gz
