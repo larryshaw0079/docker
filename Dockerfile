@@ -1,5 +1,12 @@
 FROM bryankp/pycuda
 
+ENV PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin \
+    LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib:/usr/local/cuda/extras/CUPTI/lib64:/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/cuda/lib64:/usr/local/cuda/targets/x86_64-linux/lib/stubs
+
+# Add symbol link for libcuda.so
+RUN ln -s /usr/local/cuda/targets/x86_64-linux/lib/stubs/libcuda.so \
+          /usr/local/cuda/targets/x86_64-linux/lib/stubs/libcuda.so.1
+
 WORKDIR /root
 
 #FROM registry.cn-hangzhou.aliyuncs.com/insis_hanzawa/docker_public:base
