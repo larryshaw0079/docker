@@ -1,6 +1,6 @@
 FROM bryankp/pycuda
 
-RUN pip3 install scipy scikit-learn seaborn pandas tqdm matplotlib
+RUN pip3 install scipy scikit-learn seaborn pandas tqdm matplotlib jupyter
 
 WORKDIR /root
 
