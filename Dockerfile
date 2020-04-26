@@ -1,6 +1,6 @@
 FROM registry.cn-hangzhou.aliyuncs.com/insis_hanzawa/docker_public:base
 
-RUN pip3 install tqdm numpy pandas matplotlib scikit-learn scipy seaborn numba
+RUN pip3 install tqdm numpy pandas matplotlib scikit-learn scipy seaborn llvmlite numba
 
 WORKDIR /root
 RUN wget https://files.pythonhosted.org/packages/5e/3f/5658c38579b41866ba21ee1b5020b8225cec86fe717e4b1c5c972de0a33c/pycuda-2019.1.2.tar.gz
