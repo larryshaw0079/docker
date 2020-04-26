@@ -56,29 +56,19 @@ RUN ln -s /usr/local/cuda/targets/x86_64-linux/lib/stubs/libcuda.so \
 RUN DEBIAN_FRONTEND=noninteractive && \
     apt-get clean && \
     apt-get update -y && \
-    apt-get install -y gcc make build-essential libssl-dev wget curl vim --allow-unauthenticated
-
-WORKDIR /root
-RUN wget http://zlib.net/zlib-1.2.11.tar.gz
-RUN tar -xvf zlib-1.2.11.tar.gz
-WORKDIR /root/zlib-1.2.11
-RUN ./configure && make && make install
-
-WORKDIR /root
-RUN wget https://www.python.org/ftp/python/3.6.10/Python-3.6.10.tgz
-RUN tar -xzvf Python-3.6.10.tgz
-WORKDIR /root/Python-3.6.10
-
-RUN ./configure && make && make install
-RUN wget https://bootstrap.pypa.io/get-pip.py
-RUN python3 get-pip.py
-
-RUN pip3 install -U pip
-
-# Install pytorch
-RUN pip3 install torch torchvision
+    apt-get install -y gcc make build-essential python-dev python-setuptools libboost-python-dev libboost-thread-dev libssl-dev wget curl vim libboost-all-dev --allow-unauthenticated
 
 # Install libs
+RUN pip3 install -U pip
 RUN pip3 install tqdm numpy pandas matplotlib scikit-learn pymltoolkit scipy seaborn numba statsmodels dill pymongo click
+
+WORKDIR /root
+RUN wget https://files.pythonhosted.org/packages/5e/3f/5658c38579b41866ba21ee1b5020b8225cec86fe717e4b1c5c972de0a33c/pycuda-2019.1.2.tar.gz
+RUN tar -xzvf pycuda-2019.1.2.tar.gz
+RUN cd pycuda-2019.1.2
+RUN ./configure.py --cuda-root=/usr/local/cuda --cudadrv-lib-dir=/usr/lib --boost-inc-dir=/usr/include --boost-lib-dir=/usr/lib --boost-python-libname=boost_python-py35 --boost-thread-libname=boost_thread
+RUN make -j 16
+RUN python3 setup.py install
+RUN pip3 install .
 
 ENV LC_ALL C
