@@ -60,7 +60,7 @@ RUN DEBIAN_FRONTEND=noninteractive && \
 
 # Install libs
 RUN pip3 install -U pip
-RUN pip3 install tqdm numpy pandas matplotlib scikit-learn pymltoolkit scipy seaborn numba statsmodels dill pymongo click
+RUN pip3 install tqdm numpy pandas matplotlib scikit-learn pymltoolkit scipy seaborn numba statsmodels click
 
 WORKDIR /root
 RUN wget https://files.pythonhosted.org/packages/5e/3f/5658c38579b41866ba21ee1b5020b8225cec86fe717e4b1c5c972de0a33c/pycuda-2019.1.2.tar.gz
