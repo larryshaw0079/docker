@@ -1,16 +1,20 @@
 FROM registry.cn-hangzhou.aliyuncs.com/insis_hanzawa/docker_public:base
 
-RUN apt-get update && apt-get install -y git vim build-essential
+# Add symbol link for libcuda.so
+RUN ln -s /usr/local/cuda/targets/x86_64-linux/lib/stubs/libcuda.so \
+          /usr/local/cuda/targets/x86_64-linux/lib/stubs/libcuda.so.1
 
-WORKDIR /root
-RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.5 1
-RUN git clone https://github.com/perslev/U-Time
-RUN pip3 install -U pip setuptools
-RUN pip3 install tensorflow
-RUN pip3 install -r /root/U-Time/requirements.txt
-RUN rm /root/U-Time/README.md
-RUN echo '' > /root/U-Time/README.md
-RUN pip3 install -e U-Time
-RUN ut fetch --dataset sleep-EDF-153 --out_dir datasets/sleep-EDF-153
+#RUN apt-get update
+#RUN apt-get install python python3 --upgrade
+
+RUN pip3 install -U pip
+
+# Install pytorch
+RUN pip3 install torch torchvision
+RUN pip3 install "pillow<7"
+
+# Install libs
+RUN pip3 install tqdm numpy pandas matplotlib scikit-learn pymltoolkit scipy seaborn numba statsmodels dill pymongo click
+RUN pip3 install wandb
 
 ENV LC_ALL C
