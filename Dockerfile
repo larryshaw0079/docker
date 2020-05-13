@@ -14,7 +14,8 @@ RUN pip3 install torch torchvision
 RUN pip3 install "pillow<7"
 
 # Install libs
-RUN pip3 install tqdm numpy pandas matplotlib scikit-learn pymltoolkit scipy seaborn statsmodels dill pymongo click
-RUN pip3 install wandb
+RUN pip3 install tqdm numpy pandas matplotlib scikit-learn pymltoolkit scipy seaborn statsmodels dill pymongo click wandb
 
 ENV LC_ALL C
+RUN export LC_ALL=C.UTF-8
+RUN export LANG=C.UTF-8
