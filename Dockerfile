@@ -17,5 +17,5 @@ RUN pip3 install "pillow<7"
 RUN pip3 install tqdm numpy pandas matplotlib scikit-learn pymltoolkit scipy seaborn statsmodels dill pymongo click wandb
 
 ENV LC_ALL C
-RUN export LC_ALL=C.UTF-8
-RUN export LANG=C.UTF-8
+ENV LC_ALL C.UTF-8
+ENV LANG C.UTF-8
