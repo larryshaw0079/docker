@@ -86,20 +86,20 @@ RUN pip install --no-cache-dir autopep8 \
 
 
 # 添加jupyter插件的配置文件
-COPY ["notebook.json", "run.sh", "/tmp/"]
-# 安装jupyter插件
-RUN pip install jupyter_contrib_nbextensions \
-&& jupyter contrib nbextension install --system \
-&& pip install jupyter_nbextensions_configurator \
-&& jupyter nbextensions_configurator enable --system \
+# COPY ["notebook.json", "run.sh", "/tmp/"]
+# # 安装jupyter插件
+# RUN pip install jupyter_contrib_nbextensions \
+# && jupyter contrib nbextension install --system \
+# && pip install jupyter_nbextensions_configurator \
+# && jupyter nbextensions_configurator enable --system \
 # 更改Jupyter插件的配置，使其打开时就勾选了一些常用的应用，这里因为考虑到每次都打开容器时都是-u指定不存在的用户
 # 所以将配置文件放在了/.jupyter/nbconfig中，正常的应该为其用户目录下的这个文件,也可以在打开容器时进行挂载
-&& mkdir /.jupyter \
-&& mkdir /.jupyter/nbconfig/ \
-&& mv /tmp/notebook.json /.jupyter/nbconfig/ \
-# 开放/.local的权限保证所有用户皆可使用jupyter
-&& mkdir /.local \
-&& chmod 777 /.local
+# && mkdir /.jupyter \
+# && mkdir /.jupyter/nbconfig/ \
+# && mv /tmp/notebook.json /.jupyter/nbconfig/ \
+# # 开放/.local的权限保证所有用户皆可使用jupyter
+# && mkdir /.local \
+# && chmod 777 /.local
 
 # 设定工作目录
 # WORKDIR /home/SongLongze
