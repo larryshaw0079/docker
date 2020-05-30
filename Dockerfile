@@ -78,10 +78,10 @@ RUN pip install --no-cache-dir autopep8 \
 && python3 -m pip --no-cache-dir install  --upgrade nni==$NNI_VERSION \
 && pip install tensorboardX==$TENSORBOARDX_VERSION \
 # 安装XGBoost
-&& pip install xgboost \
-&& pip --no-cache-dir install nvidia-ml-py3 \
+# && pip install xgboost \
+# && pip --no-cache-dir install nvidia-ml-py3 \
 # 安装DGL
-&& pip install --no-cache-dir dgl-cu100
+# && pip install --no-cache-dir dgl-cu100
 
 
 
