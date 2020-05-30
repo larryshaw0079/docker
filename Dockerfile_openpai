@@ -1,1 +1,0 @@
-FROM openpai/jupyter_python36_pytorch1.3
