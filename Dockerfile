@@ -42,7 +42,7 @@ RUN mkdir -p /var/run/sshd \
 # COPY anaconda.sh /
 # 下载 安装anaconda并配置环境变量
 
-RUN wget --quiet https://repo.anaconda.com/archive/$ANACONDA_VERSION.sh -O ~/anaconda.sh \
+RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.sh -O ~/anaconda.sh \
 # 安装anaconda
 && /bin/bash ~/anaconda.sh -b -p /opt/conda \
 # 删除安装包
