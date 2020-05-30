@@ -84,7 +84,7 @@ RUN pip install --no-cache-dir autopep8 \
 # && pip install --no-cache-dir dgl-cu100
 
 RUN pip install six==1.11.0 matplotlib==3.0.2 numpy==1.15.4 pandas==0.23.4 scipy==1.2.0 tqdm==4.28.1 imageio click==7.0 scikit_learn==0.20.2 fs==2.3.0 tensorflow_probability==0.5.0
-RUN pip install -U filelock
+RUN pip install -U --ignore-installed filelock
 RUN pip install git+https://github.com/thu-ml/zhusuan.git
 RUN pip install git+https://github.com/haowen-xu/tfsnippet.git@v0.2.0-alpha1
 
