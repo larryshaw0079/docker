@@ -76,7 +76,7 @@ RUN pip install --no-cache-dir autopep8 \
 && pip install --no-cache-dir pyecharts \
 # 安装指定版本NNI
 && python3 -m pip --no-cache-dir install  --upgrade nni==$NNI_VERSION \
-&& pip install tensorboardX==$TENSORBOARDX_VERSION \
+&& pip install tensorboardX==$TENSORBOARDX_VERSION 
 # 安装XGBoost
 # && pip install xgboost \
 # && pip --no-cache-dir install nvidia-ml-py3 \
