@@ -1,67 +1,126 @@
-###############################################################################################################
-FROM nvidia/cuda@sha256:40db1c98b66e133f54197ba1a66312b9c29842635c8cba5ae66fb56ded695b7c
+FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
 
-ENV HADOOP_VERSION=2.7.2
-LABEL HADOOP_VERSION=2.7.2
+MAINTAINER songlongze
 
-RUN DEBIAN_FRONTEND=noninteractive && \
-    apt-get -y update && \
-    apt-get -y install python \
-        python-pip \
-        python-dev \
-        python3 \
-        python3-pip \
-        python3-dev \
-        python-yaml \
-        python-six \
-        build-essential \
-        wget \
-        git \
-        curl \
-        unzip \
-        automake \
-        openjdk-8-jdk \
-        openssh-server \
-        openssh-client \
-        lsof \
-        libcupti-dev && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# 设置环境变量
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
+# Anaconda的环境变量
+ENV PATH /opt/conda/bin:$PATH 
 
-RUN wget -qO- http://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz | \
-    tar xz -C /usr/local && \
-    mv /usr/local/hadoop-${HADOOP_VERSION} /usr/local/hadoop
+# torch1.4-cuda10
+ENV TF_VERSION=1.14 \
+ANACONDA_VERSION="Anaconda3-2020.02-Linux-x86_64" \
+TORCH_URL="torch" \
+TORCH_VRISION_URL="torchvision" \
+TENSORBOARDX_VERSION=1.9 \
+NNI_VERSION=1.4
 
-ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 \
-    HADOOP_INSTALL=/usr/local/hadoop \
-    NVIDIA_VISIBLE_DEVICES=all
+# 下载依赖的软件包
+# wget下载Anaconda用， 后两个ssh用
+RUN buildDeps='wget openssh-server net-tools sudo vim ' \ 
+&& apt-get update \
+&& apt-get install -y $buildDeps \
+# 清除apt缓存
+&& rm -rf /var/lib/apt/lists/*
 
-ENV HADOOP_PREFIX=${HADOOP_INSTALL} \
-    HADOOP_BIN_DIR=${HADOOP_INSTALL}/bin \
-    HADOOP_SBIN_DIR=${HADOOP_INSTALL}/sbin \
-    HADOOP_HDFS_HOME=${HADOOP_INSTALL} \
-    HADOOP_COMMON_LIB_NATIVE_DIR=${HADOOP_INSTALL}/lib/native \
-    HADOOP_OPTS="-Djava.library.path=${HADOOP_INSTALL}/lib/native"
 
-ENV PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${HADOOP_BIN_DIR}:${HADOOP_SBIN_DIR} \
-    LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib:/usr/local/cuda/extras/CUPTI/lib64:/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/cuda/lib64:/usr/local/cuda/targets/x86_64-linux/lib/stubs:${JAVA_HOME}/jre/lib/amd64/server
+# 安装 ssh 服务
 
-###############################################################################################################
-# Add symbol link for libcuda.so
-RUN ln -s /usr/local/cuda/targets/x86_64-linux/lib/stubs/libcuda.so \
-          /usr/local/cuda/targets/x86_64-linux/lib/stubs/libcuda.so.1
+# 手动创建目录
+RUN mkdir -p /var/run/sshd \
+# 允许root用户登陆
+&& echo  PermitRootLogin yes >> /etc/ssh/sshd_config \
+# 修改密码为111
+&& echo root:111 | chpasswd
 
-RUN DEBIAN_FRONTEND=noninteractive && \
-    apt-get clean && \
-    apt-get update -y && \
-    apt-get install -y gcc make build-essential python-dev python-setuptools libboost-python-dev libboost-thread-dev libssl-dev wget curl vim libboost-all-dev --allow-unauthenticated
+# RUN  groupadd  anaconda \
+# && mkdir /opt/anaconda3 \
+# &&  chgrp -R anaconda /opt/anaconda3\
 
-RUN pip3 install -U pip
+# && chmod 777 -R /opt/anaconda3
+#　安装Anaconda
+# COPY anaconda.sh /
+# 下载 安装anaconda并配置环境变量
 
-RUN pip3 install six==1.11.0 matplotlib==3.0.2 numpy==1.15.4 pandas==0.23.4 scipy==1.2.0 scikit_learn==0.20.2 tensorflow-gpu==1.12.0 tensorflow_probability==0.5.0 tqdm==4.28.1 imageio==2.4.1 fs==2.3.0 click==7.0
-RUN pip3 install git+https://github.com/thu-ml/zhusuan.git
-RUN pip3 install git+https://github.com/haowen-xu/tfsnippet.git@v0.2.0-alpha1
+RUN wget --quiet https://repo.anaconda.com/archive/$ANACONDA_VERSION.sh -O ~/anaconda.sh \
+# 安装anaconda
+&& /bin/bash ~/anaconda.sh -b -p /opt/conda \
+# 删除安装包
+&& rm ~/anaconda.sh \
+&& ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh  \
+&& echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc  
 
-ENV LC_ALL C
-ENV LC_ALL C.UTF-8
-ENV LANG C.UTF-8
+# 从清华源安装最新稳定版tensorflow-gpu 以及 keras
+RUN pip install --no-cache-dir  --upgrade tensorflow-gpu==$TF_VERSION \
+&& pip install --no-cache-dir --upgrade keras
+
+# 安装pytorch-GPU 安装命令从官网获取也可以使用清华源
+RUN pip install --no-cache-dir $TORCH_URL \
+&& pip install --no-cache-dir $TORCH_VRISION_URL
+
+# 安装 PyTorch Geometric PyTorch图神经网络库PyG 不过此步骤会失败，因为其会验证NVIDIA可用性，但在容器构建时并没有挂载驱动
+# RUN pip install --no-cache-dir torch-scatter \
+# && pip install --no-cache-dir torch-sparse \
+# && pip install --no-cache-dir torch-cluster \
+# && pip install  --no-cache-dir torch-spline-conv \
+# && pip install torch-geometric
+
+
+
+# 安装常用的python包以及NNI
+# 从清华源安装代码格式化工具
+RUN pip install --no-cache-dir autopep8 \
+# 从清华源安装torchsnooper pytroch代码调试工具，安装时会自动安装python代码调试工具 pysnooper
+&& pip install --no-cache-dir torchsnooper \
+# 安装pyecharts
+&& pip install --no-cache-dir pyecharts \
+# 安装指定版本NNI
+&& python3 -m pip --no-cache-dir install  --upgrade nni==$NNI_VERSION \
+&& pip install tensorboardX==$TENSORBOARDX_VERSION \
+# 安装XGBoost
+&& pip install xgboost \
+&& pip --no-cache-dir install nvidia-ml-py3 \
+# 安装DGL
+&& pip install --no-cache-dir dgl-cu100
+
+
+
+# 添加jupyter插件的配置文件
+COPY ["notebook.json", "run.sh", "/tmp/"]
+# 安装jupyter插件
+RUN pip install jupyter_contrib_nbextensions \
+&& jupyter contrib nbextension install --system \
+&& pip install jupyter_nbextensions_configurator \
+&& jupyter nbextensions_configurator enable --system \
+# 更改Jupyter插件的配置，使其打开时就勾选了一些常用的应用，这里因为考虑到每次都打开容器时都是-u指定不存在的用户
+# 所以将配置文件放在了/.jupyter/nbconfig中，正常的应该为其用户目录下的这个文件,也可以在打开容器时进行挂载
+&& mkdir /.jupyter \
+&& mkdir /.jupyter/nbconfig/ \
+&& mv /tmp/notebook.json /.jupyter/nbconfig/ \
+# 开放/.local的权限保证所有用户皆可使用jupyter
+&& mkdir /.local \
+&& chmod 777 /.local
+
+# 设定工作目录
+# WORKDIR /home/SongLongze
+# 创建工作目录并开放所有权限
+RUN mkdir /workdir \
+&& chmod 777 /workdir
+WORKDIR /workdir
+
+# 创建一个普通用户，暂时没啥用，使用时容易出现权限问题
+# 添加一个普通用户，赋予sudo权限、设置密码为111，将目录所有者设定为SongLongze
+RUN useradd -u 65000 --create-home --no-log-init --shell /bin/bash PublicUser \
+&& adduser PublicUser sudo \
+&& echo 'PublicUser:111' | chpasswd \
+&& chown -R PublicUser /home/PublicUser 
+# 默认使用PublicUser用户打开容器
+USER PublicUser
+
+# 开放端口 分别为ssh端口22 jupyter默认端口8888 tensorboard默认端口6006 NNI默认端口8080
+EXPOSE 22 8888 6006 8080
+
+# 设置自启动命令
+#CMD /usr/sbin/sshd -D &
+#CMD service ssh restart &
+#CMD [ "/bin/bash" ]
