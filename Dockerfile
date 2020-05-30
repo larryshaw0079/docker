@@ -16,6 +16,7 @@ RUN DEBIAN_FRONTEND=noninteractive && \
         python-six \
         build-essential \
         wget \
+        git \
         curl \
         unzip \
         automake \
@@ -57,12 +58,9 @@ RUN DEBIAN_FRONTEND=noninteractive && \
 
 RUN pip3 install -U pip
 
-# Install pytorch
-RUN pip3 install torch torchvision
-RUN pip3 install "pillow<7"
-
-# Install libs
-RUN pip3 install tqdm numpy pandas matplotlib scikit-learn pymltoolkit scipy seaborn statsmodels dill pymongo click wandb
+RUN pip3 install six==1.11.0 matplotlib==3.0.2 numpy==1.15.4 pandas==0.23.4 scipy==1.2.0 scikit_learn==0.20.2 tensorflow-gpu==1.12.0 tensorflow_probability==0.5.0 tqdm==4.28.1 imageio==2.4.1 fs==2.3.0 click==7.0
+RUN pip3 install git+https://github.com/thu-ml/zhusuan.git
+RUN pip3 install git+https://github.com/haowen-xu/tfsnippet.git@v0.2.0-alpha1
 
 ENV LC_ALL C
 ENV LC_ALL C.UTF-8
