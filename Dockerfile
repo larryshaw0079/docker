@@ -50,9 +50,6 @@ RUN wget --quiet https://repo.anaconda.com/archive/$ANACONDA_VERSION.sh -O ~/ana
 && ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh  \
 && echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc
 
-RUN source ~/.bashrc
-RUN conda install --yes python==3.6
-
 # 从清华源安装最新稳定版tensorflow-gpu 以及 keras
 RUN pip install --no-cache-dir  --upgrade tensorflow-gpu==$TF_VERSION \
 && pip install --no-cache-dir --upgrade keras
