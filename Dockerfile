@@ -8,7 +8,7 @@ ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV PATH /opt/conda/bin:$PATH 
 
 # torch1.4-cuda10
-ENV TF_VERSION=1.14 \
+ENV TF_VERSION=1.12 \
 ANACONDA_VERSION="Anaconda3-5.2.0-Linux-x86_64.sh" \
 TORCH_URL="torch" \
 TORCH_VRISION_URL="torchvision" \
