@@ -118,7 +118,7 @@ RUN useradd -u 65000 --create-home --no-log-init --shell /bin/bash PublicUser \
 && echo 'PublicUser:111' | chpasswd \
 && chown -R PublicUser /home/PublicUser 
 # 默认使用PublicUser用户打开容器
-USER PublicUser
+# USER PublicUser
 
 # 开放端口 分别为ssh端口22 jupyter默认端口8888 tensorboard默认端口6006 NNI默认端口8080
 EXPOSE 22 8888 6006 8080
