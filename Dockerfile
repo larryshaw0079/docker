@@ -1,6 +1,6 @@
 FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
 
-MAINTAINER songlongze
+MAINTAINER XiaoQinfeng
 
 # 设置环境变量
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
@@ -48,7 +48,9 @@ RUN wget --quiet https://repo.anaconda.com/archive/$ANACONDA_VERSION.sh -O ~/ana
 # 删除安装包
 && rm ~/anaconda.sh \
 && ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh  \
-&& echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc  
+&& echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc
+
+RUN conda install --yes python==3.6
 
 # 从清华源安装最新稳定版tensorflow-gpu 以及 keras
 RUN pip install --no-cache-dir  --upgrade tensorflow-gpu==$TF_VERSION \
