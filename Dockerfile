@@ -17,7 +17,7 @@ NNI_VERSION=1.4
 
 # 下载依赖的软件包
 # wget下载Anaconda用， 后两个ssh用
-RUN buildDeps='wget openssh-server net-tools sudo vim ' \ 
+RUN buildDeps='wget openssh-server net-tools sudo vim git cmake build-essential' \ 
 && apt-get update \
 && apt-get install -y $buildDeps \
 # 清除apt缓存
