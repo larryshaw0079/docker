@@ -23,7 +23,7 @@ RUN DEBIAN_FRONTEND=noninteractive && \
 
 RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh && /bin/bash Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -b -p /opt/miniconda \
 && rm Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh
-RUN export PATH=/opt/miniconda/bin:$PATH
+ENV PATH /opt/miniconda/bin:$PATH
     
 RUN wget -qO- http://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz | \
     tar xz -C /usr/local && \
@@ -41,4 +41,4 @@ ENV HADOOP_PREFIX=${HADOOP_INSTALL} \
     HADOOP_OPTS="-Djava.library.path=${HADOOP_INSTALL}/lib/native"
 
 ENV PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${HADOOP_BIN_DIR}:${HADOOP_SBIN_DIR} \
-LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib:/usr/local/cuda/extras/CUPTI/lib64:/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/cuda/lib64:/usr/local/cuda/targets/x86_64-linux/lib/stubs:${JAVA_HOME}/jre/lib/amd64/server
+LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib:/usr/local/cuda/extras/CUPTI/lib64:/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/cuda/lib64:/usr/local/cuda/targets/x86_64-linux/lib/stubs:${JAVA_HOME}/jre/lib/amd64/server:$PATH
