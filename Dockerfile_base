@@ -22,8 +22,8 @@ RUN DEBIAN_FRONTEND=noninteractive && \
     rm -rf /var/lib/apt/lists/*
 
 RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh && /bin/bash Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -b -p /opt/miniconda \
-&& rm Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh && ln -s /opt/miniconda/etc/profile.d/conda.sh /etc/profile.d/conda.sh  \
-&& echo ". /opt/miniconda/etc/profile.d/conda.sh" >> ~/.bashrc
+&& rm Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh
+ENV PATH /opt/miniconda/bin:$PATH
     
 RUN wget -qO- http://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz | \
     tar xz -C /usr/local && \
