@@ -54,6 +54,10 @@ RUN . /etc/os-release &&\
     ln -s /usr/bin/python3 python &&\
     ln -s /usr/bin/pip3 pip; \
     fi
+    
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh && /bin/bash Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -b -p /opt/miniconda \
+&& rm Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh
+ENV PATH /opt/miniconda/bin:$PATH
 
 RUN pip3 install --upgrade pip
 RUN pip3 install setuptools>=41.0.0
