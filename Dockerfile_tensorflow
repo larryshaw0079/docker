@@ -48,4 +48,4 @@ LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib:/usr/local/cuda/extras/CUPTI/li
 RUN pip install -U pip
 RUN pip install numpy scipy pandas matplotlib tqdm scikit-learn --ignore-installed
 RUN pip install tensorflow-gpu==1.12.0 tensorboard keras
-RUN pip install cv2
+RUN pip install python-opencv
