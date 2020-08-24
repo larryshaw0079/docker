@@ -1,6 +1,6 @@
 FROM registry.cn-hangzhou.aliyuncs.com/insis_hanzawa/docker_public:base
 
 RUN pip install -U pip
-RUN pip install numpy scipy pandas matplotlib tqdm scikit-learn configargparse joblib numba
+RUN pip install numpy scipy pandas matplotlib tqdm scikit-learn configargparse joblib numba --ignore-installed
 RUN pip install torch==1.6.0+cu101 torchvision==0.7.0+cu101 -f https://download.pytorch.org/whl/torch_stable.html
 RUN pip install torchsummary
