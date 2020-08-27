@@ -22,19 +22,4 @@ RUN cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 ENV JRE_HOME /usr/lib/jvm/java-8-openjdk-amd64/jre
 
-RUN wget https://mirrors.tuna.tsinghua.edu.cn/apache/hadoop/common/hadoop-2.9.2/hadoop-2.9.2.tar.gz | tar -xzvf -C /opt/
-ENV PATH /opt/hadoop-2.9.2/bin:/opt/hadoop-2.9.2/sbin:/usr/lib/jvm/java-8-openjdk-amd64/bin:$PATH
-ENV CLASSPATH ./:/usr/lib/jvm/java-8-openjdk-amd64/lib:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib
 
-EXPOSE 22
-
-# Hdfs ports
-EXPOSE 50010 50020 50070 50075 50090 8020 9000
-# Mapred ports
-EXPOSE 10020 19888
-#Yarn ports
-EXPOSE 8030 8031 8032 8033 8040 8042 8088
-#Other ports
-EXPOSE 49707 2122
-
-CMD  ["/usr/sbin/sshd", "-D"]
