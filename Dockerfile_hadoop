@@ -1,0 +1,32 @@
+FROM       ubuntu:16.04
+MAINTAINER wsn
+
+RUN apt-get update
+
+RUN apt-get install -y openjdk-8-jdk
+RUN apt-get install -y vim
+RUN apt install -y net-tools
+RUN apt install -y iputils-ping 
+
+RUN apt-get install -y openssh-server
+RUN mkdir /var/run/sshd
+
+RUN echo 'root:root' |chpasswd
+
+RUN sed -ri 's/^PermitRootLogin\s+.*/PermitRootLogin yes/' /etc/ssh/sshd_config
+RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
+RUN sed -ri 's/#   StrictHostKeyChecking ask/StrictHostKeyChecking no/' /etc/ssh/ssh_config
+
+RUN mkdir /root/.ssh
+RUN ssh-keygen -t rsa -P "" -f /root/.ssh/id_rsa
+RUN cat /root/.ssh/id_rsa.pub >> /root/.ssh/authorized_keys
+ 
+ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
+ENV JRE_HOME /usr/lib/jvm/java-8-openjdk-amd64/jre
+ENV PATH /opt/hadoop-2.6.5/bin:/opt/hadoop-2.6.5/sbin:/usr/lib/jvm/java-8-openjdk-amd64/bin:$PATH
+ENV CLASSPATH ./:/usr/lib/jvm/java-8-openjdk-amd64/lib:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib
+
+ADD hadoop-2.6.5.tar.gz /opt/
+EXPOSE 22
+
+CMD  ["/usr/sbin/sshd", "-D"]
