@@ -3,7 +3,7 @@ FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu18.04
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 ENV HADOOP_VERSION=2.7.2
 LABEL HADOOP_VERSION=2.7.2
-ENV MINICONDA_VERSION=4.5.4
+ENV MINICONDA_VERSION=py37_4.8.3
 
 RUN DEBIAN_FRONTEND=noninteractive && \
     apt-get -y update && \
