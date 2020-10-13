@@ -1,5 +1,5 @@
 FROM registry.cn-hangzhou.aliyuncs.com/insis_hanzawa/docker_public:base
 
 RUN pip install -U pip
-pip install mne
-pip install tensorflow-gpu==1.15 tensorboard==1.15.0
+RUN pip install mne
+RUN pip install tensorflow-gpu==1.15 tensorboard==1.15.0
