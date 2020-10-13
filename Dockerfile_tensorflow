@@ -44,4 +44,4 @@ LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib:/usr/local/cuda/extras/CUPTI/li
 
 RUN pip install -U pip
 RUN pip install mne
-RUN pip install tensorflow-gpu==1.15 tensorboard==1.15.0
+RUN pip install tensorflow-gpu==1.15 tensorboard==1.15.0 --ignore-installed
