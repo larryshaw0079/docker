@@ -19,10 +19,6 @@ RUN DEBIAN_FRONTEND=noninteractive && \
         libcupti-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-
-RUN wget --quiet https://repo.anaconda.com/archive/Anaconda3-4.2.0-Linux-x86_64.sh && /bin/bash Anaconda3-4.2.0-Linux-x86_64.sh -b -p /opt/anaconda \
-&& rm Anaconda3-4.2.0-Linux-x86_64.sh
-ENV PATH /opt/anaconda/bin:$PATH
     
 RUN wget -qO- http://archive.apache.org/dist/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz | \
     tar xz -C /usr/local && \
@@ -41,7 +37,3 @@ ENV HADOOP_PREFIX=${HADOOP_INSTALL} \
 
 ENV PATH=/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:${HADOOP_BIN_DIR}:${HADOOP_SBIN_DIR}:$PATH \
 LD_LIBRARY_PATH=/usr/local/cuda/extras/CUPTI/lib:/usr/local/cuda/extras/CUPTI/lib64:/usr/local/nvidia/lib:/usr/local/nvidia/lib64:/usr/local/cuda/lib64:/usr/local/cuda/targets/x86_64-linux/lib/stubs:${JAVA_HOME}/jre/lib/amd64/server
-
-RUN pip install -U pip
-RUN pip install mne
-RUN pip install tensorflow-gpu==1.15 tensorboard==1.15.0 --ignore-installed
